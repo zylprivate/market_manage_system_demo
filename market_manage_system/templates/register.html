@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+{% block content %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>超市管理系统 | 注册</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+  <div class="register-logo">
+    <a href="{{ url_for('auth.register') }}">Market Manage System</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Register a new membership</p>
+
+      <form  action="{{ url_for('auth.register') }}" method="post">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Username" name="username" required="required">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" id="first" class="form-control" placeholder="Password" name="password" required="required">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" id="second" class="form-control" placeholder="Retype password" required="required" onkeyup="KeyUp()">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-4">
+              <a href="{{ url_for('auth.login') }}" >
+                  <button type="button" class="btn btn-primary btn-block">登 录 </button>
+              </a>
+            </div>
+            <div class="col-4">
+                <!-- 间隔 -->
+            </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" id="submit" class="btn btn-primary btn-block">注 册</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+
+
+
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='dist/js/adminlte.min.js') }}"></script>
+</body>
+</html>
+    <script>
+var commonUtil = {
+    /**
+     * 弹出消息框
+     * @param msg 消息内容
+     * @param type 消息框类型（参考bootstrap的alert）
+     */
+    alert: function (msg, type) {
+        if (typeof (type) == "undefined") { // 未传入type则默认为success类型的消息框
+            type = "success";
+        }
+        // 创建bootstrap的alert元素
+        var divElement = $("<div></div>").addClass('alert').addClass('alert-' + type).addClass('alert-dismissible');
+        divElement.css({ // 消息框的定位样式
+            "position": "absolute",
+            "top": "80px"
+        });
+        divElement.text(msg); // 设置消息框的内容
+        // 消息框添加可以关闭按钮
+        var closeBtn = $('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+        $(divElement).append(closeBtn);
+        // 消息框放入到页面中
+        $('body').append(divElement);
+        return divElement;
+    }
+}
+     var divElement;//声明为全局变量
+    function KeyUp() {
+            var a = $('#first').val();
+            //alert(a);
+            var b = $('#second').val();
+            //alert(b);
+
+            if (a == b) {
+                $('#submit').removeAttr('disabled');
+                if (divElement)
+                    divElement.remove() //jquery 语法
+                    //移除指向的元素后，将变量还原，否则变量仍不为空,仍指向对应jquery dom 元素
+                    divElement=undefined
+            }
+            else {
+                $('#submit').attr('disabled', 'disabled');
+                if (!divElement)
+                    //只有变量为undefined 时候才生成，避免重复生成
+                divElement=commonUtil.alert('两次密码不一致','warning')
+
+            }
+            /*
+            该方法会重复生成 多个 提示框，
+            而全局变量 diveElement所指向的元素永远是最新的（每次新的提示框覆盖上一次的提示框）
+            导致最后只能删除最新的提示框，旧的则无法删除
+                 if (a == b) {
+                $('#submit').removeAttr('disabled');
+                if (divElement)
+                    divElement.remove()
+            }
+            else {
+                $('#submit').attr('disabled', 'disabled');
+                divElement=commonUtil.alert('两次密码不一致','warning')
+
+            }
+             */
+        }
+        </script>
+{% endblock %}
